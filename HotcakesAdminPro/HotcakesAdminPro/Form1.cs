@@ -1,65 +1,121 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
 
-namespace HotcakesAdminPro // Ha te máshogy nevezted el a projektet, ezt a sort írd át arra!
+namespace HotcakesAdminPro
 {
     public partial class Form1 : Form
     {
-        // --- A TE SAJÁT SZERVERED ÉS KULCSOD ---
+        // --- API BEÁLLÍTÁSOK ---
         private const string BaseUrl = "http://nerokozmetika.hu/DesktopModules/Hotcakes/API/rest/v1/";
         private const string ApiKey = "1-3518c8a8-8059-47bf-9918-5dc030e1ad34";
-
-        // A HttpClient intézi a hálózati kommunikációt
         private static readonly HttpClient client = new HttpClient();
 
         public Form1()
         {
             InitializeComponent();
+            SetupVipGrid(); // Táblázat inicializálása induláskor
         }
 
-        // --- A GOMB KATTINTÁS ESEMÉNYE ---
-        private async void btnTestApi_Click(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            // Ezt teljesen üresen hagyjuk!
+            // Csak azért van itt, hogy a Visual Studio tervezője megnyugodjon.
+        }
+
+        // --- TÁBLÁZAT DESIGN ÉS OSZLOPOK ---
+        private void SetupVipGrid()
+        {
+            gridVip.Columns.Clear();
+            gridVip.Columns.Add("Email", "Vásárló E-mail címe");
+            gridVip.Columns.Add("OrderCount", "Rendelések száma");
+            gridVip.Columns.Add("TotalSpent", "Összesen elköltve (Ft)");
+
+            gridVip.Columns["Email"].Width = 250;
+            gridVip.Columns["TotalSpent"].DefaultCellStyle.Format = "N0"; // Ezres tagoló a szép árakért
+            gridVip.AllowUserToAddRows = false;
+            gridVip.ReadOnly = true;
+            gridVip.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            gridVip.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        }
+
+        // --- KÖZÖS API HÍVÓ FÜGGVÉNY ---
+        private async Task<string> GetApiDataAsync(string endpoint)
+        {
+            string url = $"{BaseUrl}{endpoint}?key={ApiKey}";
+            HttpResponseMessage response = await client.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        // --- VIP GOMB KATTINTÁS (Itt pótoltam az 'async' szót!) ---
+        private async void btnLoadVip_Click_1(object sender, EventArgs e)
         {
             try
             {
-                // Gomb letiltása, hogy ne lehessen 100x rákattintani amíg tölt
-                btnTestApi.Enabled = false;
-                txtConsole.Text = "Kapcsolódás a Hotcakes VM-hez...\r\n";
+                btnLoadVip.Enabled = false;
+                btnLoadVip.Text = "Kalkuláció folyamatban...";
+                gridVip.Rows.Clear(); // Előző keresés törlése
 
-                // 1. Összerakjuk a lekérdezést (Kategóriák listázása)
-                string endpoint = "categories";
-                string fullUrl = $"{BaseUrl}{endpoint}?key={ApiKey}";
+                // 1. Rendelések lekérése a "GET /orders" végpontról
+                string ordersJson = await GetApiDataAsync("orders");
+                                
+                JObject ordersData = JObject.Parse(ordersJson);
 
-                txtConsole.Text += $"Cél URL: {fullUrl}\r\nFolyamatban...\r\n";
+                // Szótár: Email -> (Rendelések száma, Elköltött összeg)
+                Dictionary<string, Tuple<int, decimal>> vasarloiStatisztika = new Dictionary<string, Tuple<int, decimal>>();
 
-                // 2. Elküldjük a GET kérést a szervernek
-                HttpResponseMessage response = await client.GetAsync(fullUrl);
+                // 2. JSON feldolgozása
+                foreach (var order in ordersData["Content"])
+                {
+                    string email = order["UserEmail"]?.ToString();
+                    if (string.IsNullOrEmpty(email)) continue; // Ha nincs email, kihagyjuk
 
-                // 3. Ellenőrizzük, hogy nincs-e hiba (pl. rossz kulcs = 401 Unauthorized)
-                response.EnsureSuccessStatusCode();
+                    // Végösszeg kinyerése (Hotcakes TotalGrand mező)
+                    decimal orderTotal = 0;
+                    if (order["TotalGrand"] != null)
+                    {
+                        decimal.TryParse(order["TotalGrand"].ToString(), out orderTotal);
+                    }
 
-                // 4. Beolvassuk a szerver válaszát szövegként
-                string jsonResponse = await response.Content.ReadAsStringAsync();
+                    // 3. Adatok aggregálása (összeadása)
+                    if (vasarloiStatisztika.ContainsKey(email))
+                    {
+                        int regiDb = vasarloiStatisztika[email].Item1;
+                        decimal regiOsszeg = vasarloiStatisztika[email].Item2;
+                        vasarloiStatisztika[email] = new Tuple<int, decimal>(regiDb + 1, regiOsszeg + orderTotal);
+                    }
+                    else
+                    {
+                        vasarloiStatisztika[email] = new Tuple<int, decimal>(1, orderTotal);
+                    }
+                }
 
-                // 5. A Newtonsoft.Json segítségével "megszépítjük", hogy olvasható legyen
-                JObject parsedJson = JObject.Parse(jsonResponse);
+                // 4. Top 10 Vásárló sorba rendezése összeg szerint csökkenőbe
+                var topVasarlok = vasarloiStatisztika
+                    .OrderByDescending(x => x.Value.Item2)
+                    .Take(10);
 
-                txtConsole.Text += "\r\n✅ SIKERES KAPCSOLAT! Az API él és válaszol.\r\n";
-                txtConsole.Text += "--------------------------------------------------\r\n";
-                txtConsole.Text += parsedJson.ToString(); // Kiírjuk a formázott JSON-t
+                // 5. Kiíratás a táblázatba
+                foreach (var vasarlo in topVasarlok)
+                {
+                    gridVip.Rows.Add(vasarlo.Key, vasarlo.Value.Item1, vasarlo.Value.Item2);
+                }
+
+                btnLoadVip.Text = "Sikeres frissítés!";
             }
             catch (Exception ex)
             {
-                // Ha bármi beszakad (nincs net, rossz az URL, leállt a VM), itt írja ki a hibát
-                txtConsole.Text += $"\r\n❌ HIBA TÖRTÉNT A KAPCSOLÓDÁS SORÁN:\r\n{ex.Message}";
+                MessageBox.Show($"Hiba a VIP keresés közben:\n{ex.Message}", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                btnLoadVip.Text = "VIP Vásárlók Keresése";
             }
             finally
             {
-                // Visszakapcsoljuk a gombot
-                btnTestApi.Enabled = true;
+                btnLoadVip.Enabled = true; // Gomb visszakapcsolása
             }
         }
     }

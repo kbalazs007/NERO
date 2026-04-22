@@ -61,11 +61,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. félév\\Rendszerfejlesztés és IT projektmanagement (projekttárgy)\\Kliensalkalmazás\\v1\\HotcakesAdminPro\\HotcakesAdminPro\\HotcakesAdminPro.csproj",
+      "projectUniqueName": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. félév\\Rendszerfejlesztés és IT projektmanagement (projekttárgy)\\Kliensalkalmazás\\v2\\HotcakesAdminPro\\HotcakesAdminPro\\HotcakesAdminPro.csproj",
       "projectName": "HotcakesAdminPro",
-      "projectPath": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. félév\\Rendszerfejlesztés és IT projektmanagement (projekttárgy)\\Kliensalkalmazás\\v1\\HotcakesAdminPro\\HotcakesAdminPro\\HotcakesAdminPro.csproj",
+      "projectPath": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. félév\\Rendszerfejlesztés és IT projektmanagement (projekttárgy)\\Kliensalkalmazás\\v2\\HotcakesAdminPro\\HotcakesAdminPro\\HotcakesAdminPro.csproj",
       "packagesPath": "C:\\Users\\kacsa\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. félév\\Rendszerfejlesztés és IT projektmanagement (projekttárgy)\\Kliensalkalmazás\\v1\\HotcakesAdminPro\\HotcakesAdminPro\\obj\\",
+      "outputPath": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. félév\\Rendszerfejlesztés és IT projektmanagement (projekttárgy)\\Kliensalkalmazás\\v2\\HotcakesAdminPro\\HotcakesAdminPro\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
