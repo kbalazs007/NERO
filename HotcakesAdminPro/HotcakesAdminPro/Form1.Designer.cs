@@ -29,6 +29,10 @@
         private void InitializeComponent()
         {
             tabControl1 = new TabControl();
+            tabPageOverview = new TabPage();
+            panel3 = new Panel();
+            lblWeeklyCustomers = new Label();
+            lblWeeklyRevenue = new Label();
             tabPage1 = new TabPage();
             panel2 = new Panel();
             gridTopProducts = new DataGridView();
@@ -41,6 +45,8 @@
             gridVip = new DataGridView();
             btnLoadVip = new Button();
             tabControl1.SuspendLayout();
+            tabPageOverview.SuspendLayout();
+            panel3.SuspendLayout();
             tabPage1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)gridTopProducts).BeginInit();
@@ -52,6 +58,7 @@
             // tabControl1
             // 
             tabControl1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            tabControl1.Controls.Add(tabPageOverview);
             tabControl1.Controls.Add(tabPage1);
             tabControl1.Controls.Add(tabPage2);
             tabControl1.Location = new Point(12, 12);
@@ -59,6 +66,47 @@
             tabControl1.SelectedIndex = 0;
             tabControl1.Size = new Size(950, 821);
             tabControl1.TabIndex = 0;
+            // 
+            // tabPageOverview
+            // 
+            tabPageOverview.Controls.Add(panel3);
+            tabPageOverview.Location = new Point(4, 34);
+            tabPageOverview.Name = "tabPageOverview";
+            tabPageOverview.Padding = new Padding(3);
+            tabPageOverview.Size = new Size(942, 783);
+            tabPageOverview.TabIndex = 2;
+            tabPageOverview.Text = "Áttekintés";
+            tabPageOverview.UseVisualStyleBackColor = true;
+            // 
+            // panel3
+            // 
+            panel3.Controls.Add(lblWeeklyCustomers);
+            panel3.Controls.Add(lblWeeklyRevenue);
+            panel3.Dock = DockStyle.Top;
+            panel3.Location = new Point(3, 3);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(936, 50);
+            panel3.TabIndex = 0;
+            // 
+            // lblWeeklyCustomers
+            // 
+            lblWeeklyCustomers.AutoSize = true;
+            lblWeeklyCustomers.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblWeeklyCustomers.Location = new Point(422, 15);
+            lblWeeklyCustomers.Name = "lblWeeklyCustomers";
+            lblWeeklyCustomers.Size = new Size(222, 25);
+            lblWeeklyCustomers.TabIndex = 1;
+            lblWeeklyCustomers.Text = "Heti vásárlók száma: - fő";
+            // 
+            // lblWeeklyRevenue
+            // 
+            lblWeeklyRevenue.AutoSize = true;
+            lblWeeklyRevenue.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblWeeklyRevenue.Location = new Point(3, 15);
+            lblWeeklyRevenue.Name = "lblWeeklyRevenue";
+            lblWeeklyRevenue.Size = new Size(169, 25);
+            lblWeeklyRevenue.TabIndex = 0;
+            lblWeeklyRevenue.Text = "Heti forgalom: - Ft";
             // 
             // tabPage1
             // 
@@ -109,27 +157,30 @@
             // lblAvgOrder
             // 
             lblAvgOrder.AutoSize = true;
+            lblAvgOrder.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             lblAvgOrder.Location = new Point(3, 40);
             lblAvgOrder.Name = "lblAvgOrder";
-            lblAvgOrder.Size = new Size(196, 25);
+            lblAvgOrder.Size = new Size(212, 25);
             lblAvgOrder.TabIndex = 3;
             lblAvgOrder.Text = "Átlagos kosárérték: - Ft";
             // 
             // lblTotalRevenue
             // 
             lblTotalRevenue.AutoSize = true;
+            lblTotalRevenue.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             lblTotalRevenue.Location = new Point(566, 8);
             lblTotalRevenue.Name = "lblTotalRevenue";
-            lblTotalRevenue.Size = new Size(104, 25);
+            lblTotalRevenue.Size = new Size(114, 25);
             lblTotalRevenue.TabIndex = 2;
             lblTotalRevenue.Text = "Bevétel: - Ft";
             // 
             // lblTotalSold
             // 
             lblTotalSold.AutoSize = true;
+            lblTotalSold.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             lblTotalSold.Location = new Point(277, 8);
             lblTotalSold.Name = "lblTotalSold";
-            lblTotalSold.Size = new Size(135, 25);
+            lblTotalSold.Size = new Size(144, 25);
             lblTotalSold.TabIndex = 1;
             lblTotalSold.Text = "Eladott darab: -";
             // 
@@ -150,7 +201,7 @@
             tabPage2.Location = new Point(4, 34);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(768, 388);
+            tabPage2.Size = new Size(942, 783);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "VIP Kereső";
             tabPage2.UseVisualStyleBackColor = true;
@@ -184,6 +235,9 @@
             Text = "Form1";
             Load += Form1_Load;
             tabControl1.ResumeLayout(false);
+            tabPageOverview.ResumeLayout(false);
+            panel3.ResumeLayout(false);
+            panel3.PerformLayout();
             tabPage1.ResumeLayout(false);
             panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)gridTopProducts).EndInit();
@@ -208,5 +262,9 @@
         private Label lblTotalSold;
         private DataGridView gridTopProducts;
         private Label lblAvgOrder;
+        private TabPage tabPageOverview;
+        private Panel panel3;
+        private Label lblWeeklyCustomers;
+        private Label lblWeeklyRevenue;
     }
 }

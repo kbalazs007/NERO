@@ -1,18 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. f\u00E9l\u00E9v\\Rendszerfejleszt\u00E9s \u00E9s IT projektmanagement (projektt\u00E1rgy)\\Kliensalkalmaz\u00E1s\\AdminPro\\HotcakesAdminPro\\",
+  "WorkspaceRootPath": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. f\u00E9l\u00E9v\\Rendszerfejleszt\u00E9s \u00E9s IT projektmanagement (projektt\u00E1rgy)\\Kliensalkalmaz\u00E1s\\v5\\HotcakesAdminPro\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9C350A74-841A-49C7-8556-307076184B3B}|HotcakesAdminPro\\HotcakesAdminPro.csproj|c:\\users\\kacsa\\documents\\corvinus\\4. f\u00E9l\u00E9v\\rendszerfejleszt\u00E9s \u00E9s it projektmanagement (projektt\u00E1rgy)\\kliensalkalmaz\u00E1s\\adminpro\\hotcakesadminpro\\hotcakesadminpro\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9C350A74-841A-49C7-8556-307076184B3B}|HotcakesAdminPro\\HotcakesAdminPro.csproj|solutionrelative:hotcakesadminpro\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9C350A74-841A-49C7-8556-307076184B3B}|HotcakesAdminPro\\HotcakesAdminPro.csproj|C:\\Users\\kacsa\\Documents\\Corvinus\\4. f\u00E9l\u00E9v\\Rendszerfejleszt\u00E9s \u00E9s IT projektmanagement (projektt\u00E1rgy)\\Kliensalkalmaz\u00E1s\\AdminPro\\HotcakesAdminPro\\hotcakesadminpro\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{9C350A74-841A-49C7-8556-307076184B3B}|HotcakesAdminPro\\HotcakesAdminPro.csproj|C:\\Users\\kacsa\\Documents\\Corvinus\\4. f\u00E9l\u00E9v\\Rendszerfejleszt\u00E9s \u00E9s IT projektmanagement (projektt\u00E1rgy)\\Kliensalkalmaz\u00E1s\\v5\\HotcakesAdminPro\\hotcakesadminpro\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{9C350A74-841A-49C7-8556-307076184B3B}|HotcakesAdminPro\\HotcakesAdminPro.csproj|solutionrelative:hotcakesadminpro\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9C350A74-841A-49C7-8556-307076184B3B}|HotcakesAdminPro\\HotcakesAdminPro.csproj|c:\\users\\kacsa\\documents\\corvinus\\4. f\u00E9l\u00E9v\\rendszerfejleszt\u00E9s \u00E9s it projektmanagement (projektt\u00E1rgy)\\kliensalkalmaz\u00E1s\\adminpro\\hotcakesadminpro\\hotcakesadminpro\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{9C350A74-841A-49C7-8556-307076184B3B}|HotcakesAdminPro\\HotcakesAdminPro.csproj|c:\\users\\kacsa\\documents\\corvinus\\4. f\u00E9l\u00E9v\\rendszerfejleszt\u00E9s \u00E9s it projektmanagement (projektt\u00E1rgy)\\kliensalkalmaz\u00E1s\\v5\\hotcakesadminpro\\hotcakesadminpro\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9C350A74-841A-49C7-8556-307076184B3B}|HotcakesAdminPro\\HotcakesAdminPro.csproj|solutionrelative:hotcakesadminpro\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9C350A74-841A-49C7-8556-307076184B3B}|HotcakesAdminPro\\HotcakesAdminPro.csproj|c:\\users\\kacsa\\documents\\corvinus\\4. f\u00E9l\u00E9v\\rendszerfejleszt\u00E9s \u00E9s it projektmanagement (projektt\u00E1rgy)\\kliensalkalmaz\u00E1s\\v5\\hotcakesadminpro\\hotcakesadminpro\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9C350A74-841A-49C7-8556-307076184B3B}|HotcakesAdminPro\\HotcakesAdminPro.csproj|solutionrelative:hotcakesadminpro\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -30,39 +30,41 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "Form1.Designer.cs",
-              "DocumentMoniker": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. f\u00E9l\u00E9v\\Rendszerfejleszt\u00E9s \u00E9s IT projektmanagement (projektt\u00E1rgy)\\Kliensalkalmaz\u00E1s\\AdminPro\\HotcakesAdminPro\\HotcakesAdminPro\\Form1.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. f\u00E9l\u00E9v\\Rendszerfejleszt\u00E9s \u00E9s IT projektmanagement (projektt\u00E1rgy)\\Kliensalkalmaz\u00E1s\\v5\\HotcakesAdminPro\\HotcakesAdminPro\\Form1.Designer.cs",
               "RelativeDocumentMoniker": "HotcakesAdminPro\\Form1.Designer.cs",
-              "ToolTip": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. f\u00E9l\u00E9v\\Rendszerfejleszt\u00E9s \u00E9s IT projektmanagement (projektt\u00E1rgy)\\Kliensalkalmaz\u00E1s\\AdminPro\\HotcakesAdminPro\\HotcakesAdminPro\\Form1.Designer.cs",
+              "ToolTip": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. f\u00E9l\u00E9v\\Rendszerfejleszt\u00E9s \u00E9s IT projektmanagement (projektt\u00E1rgy)\\Kliensalkalmaz\u00E1s\\v5\\HotcakesAdminPro\\HotcakesAdminPro\\Form1.Designer.cs",
               "RelativeToolTip": "HotcakesAdminPro\\Form1.Designer.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-22T09:54:37.26Z"
+              "WhenOpened": "2026-04-22T09:54:37.26Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Form1.cs",
-              "DocumentMoniker": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. f\u00E9l\u00E9v\\Rendszerfejleszt\u00E9s \u00E9s IT projektmanagement (projektt\u00E1rgy)\\Kliensalkalmaz\u00E1s\\AdminPro\\HotcakesAdminPro\\HotcakesAdminPro\\Form1.cs",
+              "DocumentMoniker": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. f\u00E9l\u00E9v\\Rendszerfejleszt\u00E9s \u00E9s IT projektmanagement (projektt\u00E1rgy)\\Kliensalkalmaz\u00E1s\\v5\\HotcakesAdminPro\\HotcakesAdminPro\\Form1.cs",
               "RelativeDocumentMoniker": "HotcakesAdminPro\\Form1.cs",
-              "ToolTip": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. f\u00E9l\u00E9v\\Rendszerfejleszt\u00E9s \u00E9s IT projektmanagement (projektt\u00E1rgy)\\Kliensalkalmaz\u00E1s\\AdminPro\\HotcakesAdminPro\\HotcakesAdminPro\\Form1.cs",
+              "ToolTip": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. f\u00E9l\u00E9v\\Rendszerfejleszt\u00E9s \u00E9s IT projektmanagement (projektt\u00E1rgy)\\Kliensalkalmaz\u00E1s\\v5\\HotcakesAdminPro\\HotcakesAdminPro\\Form1.cs",
               "RelativeToolTip": "HotcakesAdminPro\\Form1.cs",
-              "ViewState": "AgIAAD0AAAAAAAAAAAAUwEwAAAATAAAAAAAAAA==",
+              "ViewState": "AgIAAPIBAAAAAAAAAAAEwAUCAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-21T21:10:48.535Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Form1.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. f\u00E9l\u00E9v\\Rendszerfejleszt\u00E9s \u00E9s IT projektmanagement (projektt\u00E1rgy)\\Kliensalkalmaz\u00E1s\\AdminPro\\HotcakesAdminPro\\HotcakesAdminPro\\Form1.cs",
+              "DocumentMoniker": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. f\u00E9l\u00E9v\\Rendszerfejleszt\u00E9s \u00E9s IT projektmanagement (projektt\u00E1rgy)\\Kliensalkalmaz\u00E1s\\v5\\HotcakesAdminPro\\HotcakesAdminPro\\Form1.cs",
               "RelativeDocumentMoniker": "HotcakesAdminPro\\Form1.cs",
-              "ToolTip": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. f\u00E9l\u00E9v\\Rendszerfejleszt\u00E9s \u00E9s IT projektmanagement (projektt\u00E1rgy)\\Kliensalkalmaz\u00E1s\\v4\\HotcakesAdminPro\\HotcakesAdminPro\\Form1.cs [Design]",
-              "RelativeToolTip": "..\\..\\v4\\HotcakesAdminPro\\HotcakesAdminPro\\Form1.cs [Design]",
+              "ToolTip": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. f\u00E9l\u00E9v\\Rendszerfejleszt\u00E9s \u00E9s IT projektmanagement (projektt\u00E1rgy)\\Kliensalkalmaz\u00E1s\\v5\\HotcakesAdminPro\\HotcakesAdminPro\\Form1.cs [Design]",
+              "RelativeToolTip": "HotcakesAdminPro\\Form1.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-21T21:03:18Z"
+              "WhenOpened": "2026-04-21T21:03:18Z",
+              "EditorCaption": " [Design]"
             }
           ]
         }

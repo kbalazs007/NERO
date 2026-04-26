@@ -21,6 +21,7 @@ namespace HotcakesAdminPro
         // Ez a szótár tárolja a Python által kinyert SKU -> Szín párokat
         private Dictionary<string, string> SkuColorMap = new Dictionary<string, string>();
         private Chart chartColors;
+        private Chart chartWeeklyColors;
 
         // --- ADATSTRUKTÚRA A TÁBLÁZATHOZ ÉS ELEMZÉSHEZ ---
         public class ProductStat
@@ -65,6 +66,8 @@ namespace HotcakesAdminPro
             LoadSkuColors(); // CSV betöltése induláskor
             SetupVipGrid();
             SetupChart();
+
+            SetupOverviewChart();
 
             btnLoadColors.Click += btnLoadColors_Click;
         }
@@ -152,6 +155,132 @@ namespace HotcakesAdminPro
             gridTopProducts.Columns["Revenue"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             gridTopProducts.Columns["Qty"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
         }
+
+        private void SetupOverviewChart()
+        {
+            chartWeeklyColors = new Chart();
+
+            // Kitölti az üres helyet
+            chartWeeklyColors.Dock = DockStyle.Fill;
+
+            ChartArea chartArea = new ChartArea("OverviewArea");
+            chartArea.Area3DStyle.Enable3D = false;
+            chartWeeklyColors.ChartAreas.Add(chartArea);
+
+            // Hozzáadjuk a fülhöz (IDE ÍRD AZ ÚJ FÜLED NEVÉT!)
+            tabPageOverview.Controls.Add(chartWeeklyColors);
+
+            // Hátraküldjük, hogy ne takarja el a felső panelt a bevételekkel
+            chartWeeklyColors.SendToBack();
+        }
+
+        // TabOverview
+
+        private async Task LoadOverviewData()
+        {
+            try
+            {
+                // 1. Alapadatok és időablak beállítása (utolsó 7 nap)
+                DateTime sevenDaysAgo = DateTime.UtcNow.AddDays(-7);
+                decimal weeklyRevenue = 0;
+                HashSet<string> weeklyUniqueCustomers = new HashSet<string>();
+                Dictionary<string, int> weeklyColorStats = new Dictionary<string, int>();
+                Dictionary<string, string> skuCache = new Dictionary<string, string>();
+
+                string ordersJson = await GetApiDataAsync("orders");
+                JObject ordersData = JObject.Parse(ordersJson);
+
+                if (ordersData["Content"] is JArray ordersArray)
+                {
+                    foreach (JObject order in ordersArray.OfType<JObject>())
+                    {
+                        // Dátum kinyerése (a korábban javított, castolós módszerrel)
+                        DateTime orderDate = DateTime.MinValue;
+                        if (order["TimeOfOrderUtc"] != null)
+                        {
+                            orderDate = (DateTime)order["TimeOfOrderUtc"];
+                        }
+
+                        // CSAK AZ ELMÚLT 7 NAPOT NÉZZÜK
+                        if (orderDate >= sevenDaysAgo)
+                        {
+                            // Bevétel és Vásárló számolás
+                            decimal total = 0;
+                            decimal.TryParse(order["TotalGrand"]?.ToString(), out total);
+                            weeklyRevenue += total;
+
+                            string email = order["UserEmail"]?.ToString();
+                            if (!string.IsNullOrEmpty(email)) weeklyUniqueCustomers.Add(email);
+
+                            // Szín statisztika a heti rendelések tételeiből
+                            string orderBvin = order["bvin"]?.ToString() ?? order["Bvin"]?.ToString();
+                            string detailJson = await GetApiDataAsync($"orders/{orderBvin}");
+                            JObject fullOrder = (JObject)JObject.Parse(detailJson)["Content"];
+
+                            JArray items = (fullOrder["Items"] as JArray) ?? (fullOrder["LineItems"] as JArray);
+                            if (items != null)
+                            {
+                                foreach (JObject item in items.OfType<JObject>())
+                                {
+                                    string pid = item["ProductId"]?.ToString();
+                                    int qty = 0;
+                                    int.TryParse(item["Quantity"]?.ToString(), out qty);
+
+                                    if (!string.IsNullOrEmpty(pid) && qty > 0)
+                                    {
+                                        string sku = "";
+                                        if (skuCache.ContainsKey(pid)) sku = skuCache[pid];
+                                        else
+                                        {
+                                            string pJson = await GetApiDataAsync($"products/{pid}");
+                                            sku = JObject.Parse(pJson)["Content"]?["Sku"]?.ToString() ?? "";
+                                            skuCache[pid] = sku;
+                                        }
+
+                                        if (SkuColorMap.ContainsKey(sku))
+                                        {
+                                            string color = SkuColorMap[sku];
+                                            if (!weeklyColorStats.ContainsKey(color)) weeklyColorStats[color] = 0;
+                                            weeklyColorStats[color] += qty;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // 2. UI FRISSÍTÉS - KPI-ok
+                lblWeeklyRevenue.Text = $"Heti forgalom: {weeklyRevenue:N0} Ft";
+                lblWeeklyCustomers.Text = $"Heti vásárlók száma: {weeklyUniqueCustomers.Count} fő";
+
+                // 3. UI FRISSÍTÉS - TOP 5 SZÍN DIAGRAM
+                chartWeeklyColors.Series.Clear();
+                chartWeeklyColors.Titles.Clear();
+                chartWeeklyColors.Titles.Add("Heti legnépszerűbb 5 árnyalat");
+
+                Series s = new Series("HetiSzinek") { ChartType = SeriesChartType.Column }; // Oszlopdiagram a változatosság kedvéért
+                s.IsValueShownAsLabel = true;
+
+                var top5 = weeklyColorStats.OrderByDescending(x => x.Value).Take(5);
+                foreach (var stat in top5)
+                {
+                    int idx = s.Points.AddXY(stat.Key, stat.Value);
+                    // Színezés a már meglévő RealColors szótárad alapján
+                    if (RealColors.ContainsKey(stat.Key))
+                    {
+                        s.Points[idx].Color = RealColors[stat.Key];
+                    }
+                }
+                chartWeeklyColors.Series.Add(s);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Hiba az Áttekintés betöltésekor: " + ex.Message);
+            }
+        }
+
+        // TavOverView vége
 
         // --- SZÍNSTATISZTIKA GENERÁLÁSA ---
         private async void btnLoadColors_Click(object sender, EventArgs e)
@@ -382,7 +511,11 @@ namespace HotcakesAdminPro
         // ==========================================
 
         // Üres Form Load (a Designer keresi)
-        private void Form1_Load(object sender, EventArgs e) { }
+        private async void Form1_Load(object sender, EventArgs e)
+        {
+            // Opcionális: Ha van más betöltendő dolog, az is jöhet ide
+            await LoadOverviewData();
+        }
 
         // Üres gomb kattintás (valószínűleg dupla kattintással jött létre véletlenül)
         private void btnLoadColors_Click_1(object sender, EventArgs e) { }
