@@ -30,10 +30,12 @@
         {
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
+            btnLoadColors = new Button();
             tabPage2 = new TabPage();
             gridVip = new DataGridView();
             btnLoadVip = new Button();
             tabControl1.SuspendLayout();
+            tabPage1.SuspendLayout();
             tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)gridVip).BeginInit();
             SuspendLayout();
@@ -50,13 +52,24 @@
             // 
             // tabPage1
             // 
+            tabPage1.Controls.Add(btnLoadColors);
             tabPage1.Location = new Point(4, 34);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
             tabPage1.Size = new Size(768, 388);
             tabPage1.TabIndex = 0;
-            tabPage1.Text = "tabPage1";
+            tabPage1.Text = "Színeladások";
             tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // btnLoadColors
+            // 
+            btnLoadColors.Location = new Point(6, 6);
+            btnLoadColors.Name = "btnLoadColors";
+            btnLoadColors.Size = new Size(138, 60);
+            btnLoadColors.TabIndex = 0;
+            btnLoadColors.Text = "Szín Statisztika Betöltése";
+            btnLoadColors.UseVisualStyleBackColor = true;
+            btnLoadColors.Click += btnLoadColors_Click_1;
             // 
             // tabPage2
             // 
@@ -67,7 +80,7 @@
             tabPage2.Padding = new Padding(3);
             tabPage2.Size = new Size(768, 388);
             tabPage2.TabIndex = 1;
-            tabPage2.Text = "tabPage2";
+            tabPage2.Text = "VIP Kereső";
             tabPage2.UseVisualStyleBackColor = true;
             // 
             // gridVip
@@ -99,6 +112,7 @@
             Text = "Form1";
             Load += Form1_Load;
             tabControl1.ResumeLayout(false);
+            tabPage1.ResumeLayout(false);
             tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)gridVip).EndInit();
             ResumeLayout(false);
@@ -111,5 +125,6 @@
         private TabPage tabPage2;
         private DataGridView gridVip;
         private Button btnLoadVip;
+        private Button btnLoadColors;
     }
 }
