@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO; // CSV olvasáshoz
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Text.RegularExpressions;
 
 namespace HotcakesAdminPro
 {
@@ -20,6 +21,43 @@ namespace HotcakesAdminPro
         // Ez a szótár tárolja a Python által kinyert SKU -> Szín párokat
         private Dictionary<string, string> SkuColorMap = new Dictionary<string, string>();
         private Chart chartColors;
+
+        // --- ADATSTRUKTÚRA A TÁBLÁZATHOZ ÉS ELEMZÉSHEZ ---
+        public class ProductStat
+        {
+            public string ProductId { get; set; }
+            public string Sku { get; set; }
+            public string Name { get; set; }
+            public string Color { get; set; }
+            public int QuantitySold { get; set; }
+            public decimal TotalRevenue { get; set; }
+            public HashSet<string> OrderIdsContaining { get; set; } = new HashSet<string>();
+        }
+
+        // --- A VALÓDI SZÍNEK (RGB) SZÓTÁRA ---
+        private readonly Dictionary<string, System.Drawing.Color> RealColors = new Dictionary<string, System.Drawing.Color>
+        {
+            { "Piros", System.Drawing.Color.FromArgb(220, 20, 40) },
+            { "Bordó", System.Drawing.Color.FromArgb(120, 10, 30) },
+            { "Rózsaszín", System.Drawing.Color.FromArgb(255, 150, 180) },
+            { "Pink", System.Drawing.Color.FromArgb(230, 50, 130) },
+            { "Nude", System.Drawing.Color.FromArgb(235, 205, 180) },
+            { "Fehér", System.Drawing.Color.FromArgb(240, 240, 240) }, // Kicsit szürkés, hogy látszódjon a fehér háttéren
+            { "Fekete", System.Drawing.Color.FromArgb(30, 30, 30) },
+            { "Kék", System.Drawing.Color.FromArgb(50, 100, 200) },
+            { "Lila", System.Drawing.Color.FromArgb(150, 80, 180) },
+            { "Zöld", System.Drawing.Color.FromArgb(80, 180, 100) },
+            { "Menta", System.Drawing.Color.FromArgb(160, 230, 190) },
+            { "Sárga", System.Drawing.Color.FromArgb(250, 230, 80) },
+            { "Narancs", System.Drawing.Color.FromArgb(240, 130, 40) },
+            { "Barack", System.Drawing.Color.FromArgb(255, 180, 140) },
+            { "Barna", System.Drawing.Color.FromArgb(140, 90, 60) },
+            { "Szürke", System.Drawing.Color.FromArgb(150, 150, 150) },
+            { "Arany", System.Drawing.Color.FromArgb(210, 180, 80) },
+            { "Ezüst", System.Drawing.Color.FromArgb(190, 190, 190) },
+            { "Neon", System.Drawing.Color.FromArgb(200, 255, 50) },
+            { "Átlátszó", System.Drawing.Color.FromArgb(200, 220, 255) } // Halvány jégkék, hogy érzékeltesse
+        };
 
         public Form1()
         {
@@ -36,12 +74,12 @@ namespace HotcakesAdminPro
         {
             try
             {
-                // A fájlnak a .exe mellett kell lennie (vagy adj meg teljes útvonalat)
-                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "C:\\Users\\kacsa\\Documents\\Corvinus\\4. félév\\Rendszerfejlesztés és IT projektmanagement (projekttárgy)\\Kliensalkalmazás\\v3\\HotcakesAdminPro\\sku_colors.csv");
+                // CSV-hez
+                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "sku_colors.csv");
 
                 if (!File.Exists(path))
                 {
-                    MessageBox.Show("A 'sku_colors.csv' nem található a program mappájában! A statisztika nem fog működni.", "Hiányzó adatfájl");
+                    MessageBox.Show("A 'sku_colors.csv' nem található a megadott útvonalon! A statisztika nem fog működni.", "Hiányzó adatfájl");
                     return;
                 }
 
@@ -71,21 +109,48 @@ namespace HotcakesAdminPro
         private void SetupChart()
         {
             chartColors = new Chart();
-            chartColors.Dock = DockStyle.Fill;
+
+            // KIKAPCSOLJUK A DOCKOLÁST - Kézzel fogjuk elhelyezni!
+            chartColors.Dock = DockStyle.None;
+
+            // Beállítjuk a Horgonyokat, hogy kövesse az ablak méretezését
+            chartColors.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+
+            // PIXEL PONTOS POZÍCIONÁLÁS:
+            chartColors.Top = 120; // Pontosan a felső panel alatt kezdődjön
+            chartColors.Left = 0;
+            chartColors.Width = tabPage1.Width;
+
+            // A magassága = a fül teljes magassága MÍNUSZ a felső panel (120) MÍNUSZ az alsó panel (200)
+            chartColors.Height = tabPage1.Height - 120 - 200;
+
             ChartArea chartArea = new ChartArea("MainArea");
+            chartArea.Area3DStyle.Enable3D = false;
             chartColors.ChartAreas.Add(chartArea);
+
             tabPage1.Controls.Add(chartColors);
 
             chartColors.Series.Clear();
             Series series = new Series("Színek");
             series.ChartType = SeriesChartType.Pie;
-            series.IsValueShownAsLabel = true;
-            // Megjelenítjük a színt és a darabszámot is a címkén
-            series.Label = "#VALX: #VAL db";
-            chartColors.Series.Add(series);
 
+            series["PieLabelStyle"] = "Outside";
+
+            chartColors.Series.Add(series);
             chartColors.Titles.Clear();
-            chartColors.Titles.Add("Színstatisztika az SKU adatbázis alapján");
+            chartColors.Titles.Add("Legnépszerűbb Színek Megoszlása (TOP 8)");
+
+            // Táblázat oszlopainak beállítása
+            gridTopProducts.Columns.Clear();
+            gridTopProducts.Columns.Add("Name", "Termék neve");
+            gridTopProducts.Columns.Add("Sku", "SKU");
+            gridTopProducts.Columns.Add("Color", "Szín");
+            gridTopProducts.Columns.Add("Qty", "Eladott db");
+            gridTopProducts.Columns.Add("Revenue", "Bevétel ebből");
+
+            gridTopProducts.Columns["Revenue"].DefaultCellStyle.Format = "N0";
+            gridTopProducts.Columns["Revenue"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            gridTopProducts.Columns["Qty"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
         }
 
         // --- SZÍNSTATISZTIKA GENERÁLÁSA ---
@@ -94,8 +159,9 @@ namespace HotcakesAdminPro
             try
             {
                 btnLoadColors.Enabled = false;
-                btnLoadColors.Text = "Elemzés folyamatban...";
+                btnLoadColors.Text = "BI Elemzés futtatása...";
                 chartColors.Series["Színek"].Points.Clear();
+                gridTopProducts.Rows.Clear();
 
                 if (SkuColorMap.Count == 0)
                 {
@@ -103,26 +169,47 @@ namespace HotcakesAdminPro
                     return;
                 }
 
-                // 1. Rendelések lekérése
                 string ordersSummaryJson = await GetApiDataAsync("orders");
                 JObject ordersSummaryData = JObject.Parse(ordersSummaryJson);
 
-                Dictionary<string, int> szinStatisztika = new Dictionary<string, int>();
+                Dictionary<string, string> skuCache = new Dictionary<string, string>();
+                Dictionary<string, ProductStat> productStats = new Dictionary<string, ProductStat>();
+                Dictionary<string, HashSet<string>> colorOrdersMap = new Dictionary<string, HashSet<string>>();
+                Dictionary<string, int> colorQuantityMap = new Dictionary<string, int>();
 
-                // Gyorsítótár: Hogy ne kérjük le ugyanazt a terméket százszor az API-tól
-                Dictionary<string, string> letoltottTermekSkuCache = new Dictionary<string, string>();
+                // --- KPI Változók ---
+                int totalValidOrders = 0;
+                decimal totalRevenue = 0;
+                int totalItemsSold = 0;
+
+                // Trend változók (Elmúlt 30 nap vs Előző 30 nap)
+                DateTime now = DateTime.UtcNow;
+                int ordersLast30 = 0, ordersPrev30 = 0;
 
                 if (ordersSummaryData["Content"] is JArray ordersArray)
                 {
                     foreach (JObject orderSummary in ordersArray.OfType<JObject>())
                     {
-                        decimal total = 0;
-                        if (orderSummary["TotalGrand"] != null) decimal.TryParse(orderSummary["TotalGrand"].ToString(), out total);
+                        decimal orderGrandTotal = 0;
+                        if (orderSummary["TotalGrand"] != null) decimal.TryParse(orderSummary["TotalGrand"].ToString(), out orderGrandTotal);
 
-                        // Csak a valódi vásárlásokat nézzük
-                        if (total > 0)
+                        if (orderGrandTotal > 0)
                         {
+                            totalValidOrders++;
+                            totalRevenue += orderGrandTotal;
+
                             string orderBvin = orderSummary["bvin"]?.ToString() ?? orderSummary["Bvin"]?.ToString();
+                            DateTime orderDate = DateTime.MinValue;
+                            if (orderSummary["TimeOfOrderUtc"] != null)
+                            {
+                                // Egyszerűen "kikényszerítjük" (castoljuk) a már konvertált dátumot!
+                                orderDate = (DateTime)orderSummary["TimeOfOrderUtc"];
+                            }
+
+                            if (orderDate >= now.AddDays(-30)) ordersLast30++;
+                            else if (orderDate >= now.AddDays(-60)) ordersPrev30++;
+
+                            // Részletes kosár lekérése
                             string singleOrderJson = await GetApiDataAsync($"orders/{orderBvin}");
                             JObject fullOrder = (JObject)JObject.Parse(singleOrderJson)["Content"];
 
@@ -132,40 +219,50 @@ namespace HotcakesAdminPro
                                 foreach (JObject item in items.OfType<JObject>())
                                 {
                                     string productId = item["ProductId"]?.ToString();
+                                    string productName = item["ProductName"]?.ToString();
+
                                     int qty = 0;
                                     if (item["Quantity"] != null) int.TryParse(item["Quantity"].ToString(), out qty);
+
+                                    decimal lineTotal = 0;
+                                    if (item["LineTotal"] != null) decimal.TryParse(item["LineTotal"].ToString(), out lineTotal);
+
+                                    totalItemsSold += qty;
 
                                     if (!string.IsNullOrEmpty(productId) && qty > 0)
                                     {
                                         string valodiSku = "";
-
-                                        // MÉLYFÚRÁS: Benne van már a memóriánkban ez a termék?
-                                        if (letoltottTermekSkuCache.ContainsKey(productId))
+                                        if (skuCache.ContainsKey(productId))
                                         {
-                                            valodiSku = letoltottTermekSkuCache[productId];
+                                            valodiSku = skuCache[productId];
                                         }
                                         else
                                         {
-                                            // Ha nincs, rárúgjuk az ajtót a katalógus API-ra a tényleges SKU-ért!
                                             string singleProductJson = await GetApiDataAsync($"products/{productId}");
-                                            JObject productData = JObject.Parse(singleProductJson);
-                                            JObject fullProduct = productData["Content"] as JObject;
-
+                                            JObject fullProduct = JObject.Parse(singleProductJson)["Content"] as JObject;
                                             valodiSku = fullProduct?["Sku"]?.ToString() ?? "";
-
-                                            // Eltesszük a memóriába, hogy legközelebb már ne kelljen letölteni
-                                            letoltottTermekSkuCache[productId] = valodiSku;
+                                            skuCache[productId] = valodiSku;
                                         }
 
-                                        // DÖNTÉSI LOGIKA: Szerepel a VALÓDI SKU a CSV listában?
                                         if (!string.IsNullOrEmpty(valodiSku) && SkuColorMap.ContainsKey(valodiSku))
                                         {
                                             string color = SkuColorMap[valodiSku];
 
-                                            if (!szinStatisztika.ContainsKey(color))
-                                                szinStatisztika[color] = 0;
+                                            // Szín statisztika frissítése
+                                            if (!colorQuantityMap.ContainsKey(color)) colorQuantityMap[color] = 0;
+                                            colorQuantityMap[color] += qty;
 
-                                            szinStatisztika[color] += qty;
+                                            if (!colorOrdersMap.ContainsKey(color)) colorOrdersMap[color] = new HashSet<string>();
+                                            colorOrdersMap[color].Add(orderBvin);
+
+                                            // Termék statisztika frissítése a Táblázathoz
+                                            if (!productStats.ContainsKey(productId))
+                                            {
+                                                productStats[productId] = new ProductStat { ProductId = productId, Name = productName, Sku = valodiSku, Color = color };
+                                            }
+                                            productStats[productId].QuantitySold += qty;
+                                            productStats[productId].TotalRevenue += lineTotal;
+                                            productStats[productId].OrderIdsContaining.Add(orderBvin);
                                         }
                                     }
                                 }
@@ -174,24 +271,85 @@ namespace HotcakesAdminPro
                     }
                 }
 
-                // 2. Diagram frissítése
-                if (szinStatisztika.Count > 0)
+                // --- 1. KPI-ok KIÍRÁSA A CÍMKÉKRE ---
+                decimal avgOrderValue = totalValidOrders > 0 ? (totalRevenue / totalValidOrders) : 0;
+                string trendText = "";
+                if (ordersPrev30 > 0)
                 {
-                    foreach (var stat in szinStatisztika.OrderByDescending(x => x.Value))
+                    double diff = ((double)(ordersLast30 - ordersPrev30) / ordersPrev30) * 100;
+                    trendText = $" (Trend: {diff:+0;-0}% vs előző hónap)";
+                }
+
+                lblTotalSold.Text = $"Eladott darab (összes): {totalItemsSold} db";
+                lblTotalRevenue.Text = $"Bevétel: {totalRevenue:N0} Ft";
+                lblAvgOrder.Text = $"Átlagos kosárérték: {avgOrderValue:N0} Ft\nRendelések: {ordersLast30} db elmúlt 30 napban{trendText}";
+
+                // --- 2. KÖRDIAGRAM FRISSÍTÉSE ÉS SZÍNEZÉSE (TOP 8 Szín) ---
+                var topColors = colorQuantityMap.OrderByDescending(x => x.Value).Take(8).ToList();
+
+                // !!! JAVÍTÁS INDUL !!!
+                // 1. Kiszámoljuk a CSAK a TOP 8 elemhez tartozó darabszámok összegét.
+                // Ezzel fogunk osztani, hogy a torta 100%-ot adjon ki.
+                int top8OsszesDarab = topColors.Sum(x => x.Value);
+
+                // Biztonsági ellenőrzés (bár elvileg nem lehet 0, de jobb félni)
+                if (top8OsszesDarab > 0)
+                {
+                    for (int i = 0; i < topColors.Count; i++)
                     {
-                        chartColors.Series["Színek"].Points.AddXY(stat.Key, stat.Value);
+                        string szinNeve = topColors[i].Key;
+                        int darabszam = topColors[i].Value;
+
+                        // Hozzáadjuk a pontot. Az X-et 0-nak hagyjuk, mert manuálisan feliratozzuk!
+                        int ptIndex = chartColors.Series["Színek"].Points.AddXY(0, darabszam);
+                        DataPoint pt = chartColors.Series["Színek"].Points[ptIndex];
+
+                        // SZÍNEZÉS: Rárakjuk a tortaszeletre a valódi RGB színt!
+                        if (RealColors.ContainsKey(szinNeve))
+                        {
+                            pt.Color = RealColors[szinNeve];
+                        }
+
+                        // JAVÍTOTT FELIRATOZÁS
+                        // A 'totalItemsSold' helyett a 'top8OsszesDarab' -al osztunk!
+                        double szazalekA_Tortaban = ((double)darabszam / top8OsszesDarab) * 100;
+                        pt.Label = $"{szinNeve}\n{szazalekA_Tortaban:0.0}% ({darabszam} db)";
+
+                        // Jelmagyarázat (Legend) - Ezt változatlanul hagyjuk, mert hasznos adat
+                        int rendelesekAmibenBenneVolt = colorOrdersMap[szinNeve].Count;
+                        double reszesedesARendelesekbol = ((double)rendelesekAmibenBenneVolt / totalValidOrders) * 100;
+                        pt.LegendText = $"{szinNeve} - Kosarak {reszesedesARendelesekbol:0.0}%-ában";
                     }
-                    btnLoadColors.Text = "Sikeres frissítés!";
                 }
                 else
                 {
-                    MessageBox.Show("Sikeresen letöltöttük a valódi SKU-kat, de egyik sem egyezik a CSV-ben lévő adatokkal.", "Nincs egyezés");
-                    btnLoadColors.Text = "Frissítés (Nincs adat)";
+                    MessageBox.Show("Nincs megjeleníthető adat a diagramhoz.", "Nincs adat");
                 }
+                // !!! JAVÍTÁS VÉGE !!!
+
+                // Csel: A Legend-be (jelmagyarázatba) beleírjuk, hogy a rendelések hány %-ában volt benne!
+                for (int i = 0; i < topColors.Count; i++)
+                {
+                    string szinNeve = topColors[i].Key;
+                    int darabszam = topColors[i].Value;
+                    int rendelesekAmibenBenneVolt = colorOrdersMap[szinNeve].Count;
+                    double reszesedesARendelesekbol = ((double)rendelesekAmibenBenneVolt / totalValidOrders) * 100;
+
+                    chartColors.Series["Színek"].Points[i].LegendText = $"{szinNeve} ({darabszam} db) - Kosarak {reszesedesARendelesekbol:0.0}%-ában";
+                }
+
+                // --- 3. TÁBLÁZAT FELTÖLTÉSE (TOP Termékek) ---
+                var topProducts = productStats.Values.OrderByDescending(x => x.TotalRevenue).Take(15);
+                foreach (var prod in topProducts)
+                {
+                    gridTopProducts.Rows.Add(prod.Name, prod.Sku, prod.Color, prod.QuantitySold, prod.TotalRevenue);
+                }
+
+                btnLoadColors.Text = "Sikeres Elemzés!";
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Hiba:\n{ex.Message}");
+                MessageBox.Show($"Hiba a BI elemzés közben:\n{ex.Message}", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 btnLoadColors.Text = "Hiba történt";
             }
             finally
@@ -229,7 +387,7 @@ namespace HotcakesAdminPro
         // Üres gomb kattintás (valószínűleg dupla kattintással jött létre véletlenül)
         private void btnLoadColors_Click_1(object sender, EventArgs e) { }
 
-        // A VIP Vásárlók betöltő gombja (Ezt véletlenül kivágtam az előbb!)
+        // A VIP Vásárlók betöltő gombja
         private async void btnLoadVip_Click_1(object sender, EventArgs e)
         {
             try
