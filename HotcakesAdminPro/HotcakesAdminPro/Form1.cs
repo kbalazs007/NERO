@@ -180,44 +180,37 @@ namespace HotcakesAdminPro
         {
             try
             {
-                // 1. Alapadatok és időablak beállítása (utolsó 7 nap)
                 DateTime sevenDaysAgo = DateTime.UtcNow.AddDays(-7);
-                decimal weeklyRevenue = 0;
-                HashSet<string> weeklyUniqueCustomers = new HashSet<string>();
+                // Ezek kellenek a diagramhoz
                 Dictionary<string, int> weeklyColorStats = new Dictionary<string, int>();
                 Dictionary<string, string> skuCache = new Dictionary<string, string>();
 
                 string ordersJson = await GetApiDataAsync("orders");
                 JObject ordersData = JObject.Parse(ordersJson);
+                JArray ordersArray = ordersData["Content"] as JArray;
 
-                if (ordersData["Content"] is JArray ordersArray)
+                // 1. KPI-ok (Bevétel, Vásárlók) - Ezt a részt teszteljük a StatService-szel!
+                var statService = new StatService();
+                var summary = statService.CalculateWeeklySummary(ordersArray, sevenDaysAgo);
+
+                lblWeeklyRevenue.Text = $"Heti forgalom: {summary.Revenue:N0} Ft";
+                lblWeeklyCustomers.Text = $"Heti vásárlók száma: {summary.CustomerCount} fő";
+
+                // 2. SZÍNSTATISZTIKA ÚJRAÉPÍTÉSE (A diagramhoz)
+                if (ordersArray != null)
                 {
                     foreach (JObject order in ordersArray.OfType<JObject>())
                     {
-                        // Dátum kinyerése (a korábban javított, castolós módszerrel)
-                        DateTime orderDate = DateTime.MinValue;
-                        if (order["TimeOfOrderUtc"] != null)
-                        {
-                            orderDate = (DateTime)order["TimeOfOrderUtc"];
-                        }
+                        DateTime orderDate = order["TimeOfOrderUtc"] != null ? (DateTime)order["TimeOfOrderUtc"] : DateTime.MinValue;
 
-                        // CSAK AZ ELMÚLT 7 NAPOT NÉZZÜK
                         if (orderDate >= sevenDaysAgo)
                         {
-                            // Bevétel és Vásárló számolás
-                            decimal total = 0;
-                            decimal.TryParse(order["TotalGrand"]?.ToString(), out total);
-                            weeklyRevenue += total;
-
-                            string email = order["UserEmail"]?.ToString();
-                            if (!string.IsNullOrEmpty(email)) weeklyUniqueCustomers.Add(email);
-
-                            // Szín statisztika a heti rendelések tételeiből
                             string orderBvin = order["bvin"]?.ToString() ?? order["Bvin"]?.ToString();
+                            // Részletes rendelés lekérése a színek miatt
                             string detailJson = await GetApiDataAsync($"orders/{orderBvin}");
                             JObject fullOrder = (JObject)JObject.Parse(detailJson)["Content"];
-
                             JArray items = (fullOrder["Items"] as JArray) ?? (fullOrder["LineItems"] as JArray);
+
                             if (items != null)
                             {
                                 foreach (JObject item in items.OfType<JObject>())
@@ -228,17 +221,12 @@ namespace HotcakesAdminPro
 
                                     if (!string.IsNullOrEmpty(pid) && qty > 0)
                                     {
-                                        string sku = "";
-                                        if (skuCache.ContainsKey(pid)) sku = skuCache[pid];
-                                        else
+                                        string sku = skuCache.ContainsKey(pid) ? skuCache[pid] : "";
+                                        if (string.IsNullOrEmpty(sku))
                                         {
                                             string pJson = await GetApiDataAsync($"products/{pid}");
-                                            // VÉDŐHÁLÓ: Kényszerítjük, hogy objektumként kezelje. Ha sima szöveg/null jön, akkor a 'productContent' null lesz.
                                             JObject productContent = JObject.Parse(pJson)["Content"] as JObject;
-
-                                            // A '?' operátor miatt ha a productContent null, akkor nem keres benne Sku-t, hanem békén hagyja és megy tovább.
                                             sku = productContent?["Sku"]?.ToString() ?? "";
-
                                             skuCache[pid] = sku;
                                         }
 
@@ -255,23 +243,18 @@ namespace HotcakesAdminPro
                     }
                 }
 
-                // 2. UI FRISSÍTÉS - KPI-ok
-                lblWeeklyRevenue.Text = $"Heti forgalom: {weeklyRevenue:N0} Ft";
-                lblWeeklyCustomers.Text = $"Heti vásárlók száma: {weeklyUniqueCustomers.Count} fő";
-
-                // 3. UI FRISSÍTÉS - TOP 5 SZÍN DIAGRAM
+                // 3. DIAGRAM KIRAJZOLÁSA (Visszaépítve)
                 chartWeeklyColors.Series.Clear();
                 chartWeeklyColors.Titles.Clear();
                 chartWeeklyColors.Titles.Add("Heti legnépszerűbb 5 árnyalat");
 
-                Series s = new Series("HetiSzinek") { ChartType = SeriesChartType.Column }; // Oszlopdiagram a változatosság kedvéért
-                s.IsValueShownAsLabel = true;
+                Series s = new Series("HetiSzinek") { ChartType = SeriesChartType.Column, IsValueShownAsLabel = true };
 
+                // Csak a top 5 színt rakjuk ki
                 var top5 = weeklyColorStats.OrderByDescending(x => x.Value).Take(5);
                 foreach (var stat in top5)
                 {
                     int idx = s.Points.AddXY(stat.Key, stat.Value);
-                    // Színezés a már meglévő RealColors szótárad alapján
                     if (RealColors.ContainsKey(stat.Key))
                     {
                         s.Points[idx].Color = RealColors[stat.Key];
@@ -309,7 +292,8 @@ namespace HotcakesAdminPro
                 Dictionary<string, string> skuCache = new Dictionary<string, string>();
                 Dictionary<string, ProductStat> productStats = new Dictionary<string, ProductStat>();
                 Dictionary<string, HashSet<string>> colorOrdersMap = new Dictionary<string, HashSet<string>>();
-                Dictionary<string, int> colorQuantityMap = new Dictionary<string, int>();
+                //Dictionary<string, int> colorQuantityMap = new Dictionary<string, int>();
+                var colorQuantityMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
 
                 // --- KPI Változók ---
                 int totalValidOrders = 0;
@@ -407,12 +391,11 @@ namespace HotcakesAdminPro
 
                 // --- 1. KPI-ok KIÍRÁSA A CÍMKÉKRE ---
                 decimal avgOrderValue = totalValidOrders > 0 ? (totalRevenue / totalValidOrders) : 0;
-                string trendText = "";
-                if (ordersPrev30 > 0)
-                {
-                    double diff = ((double)(ordersLast30 - ordersPrev30) / ordersPrev30) * 100;
-                    trendText = $" (Trend: {diff:+0;-0}% vs előző hónap)";
-                }
+
+                // ÚJ RÉSZ: A logikát a StatService végzi
+                var statService = new StatService();
+                double diff = statService.CalculateTrend(ordersLast30, ordersPrev30);
+                string trendText = statService.FormatTrendText(diff);
 
                 lblTotalSold.Text = $"Eladott darab (összes): {totalItemsSold} db";
                 lblTotalRevenue.Text = $"Bevétel: {totalRevenue:N0} Ft";
