@@ -1739,24 +1739,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\kacsa\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\Tamas\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. félév\\Rendszerfejlesztés és IT projektmanagement (projekttárgy)\\Kliensalkalmazás\\AdminPro\\HotcakesAdminPro\\HotcakesAdminPro\\HotcakesAdminPro.csproj",
+      "projectUniqueName": "C:\\Users\\Tamas\\Documents\\nerokliensapp\\NERO\\HotcakesAdminPro\\HotcakesAdminPro\\HotcakesAdminPro.csproj",
       "projectName": "HotcakesAdminPro",
-      "projectPath": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. félév\\Rendszerfejlesztés és IT projektmanagement (projekttárgy)\\Kliensalkalmazás\\AdminPro\\HotcakesAdminPro\\HotcakesAdminPro\\HotcakesAdminPro.csproj",
-      "packagesPath": "C:\\Users\\kacsa\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\kacsa\\Documents\\Corvinus\\4. félév\\Rendszerfejlesztés és IT projektmanagement (projekttárgy)\\Kliensalkalmazás\\AdminPro\\HotcakesAdminPro\\HotcakesAdminPro\\obj\\",
+      "projectPath": "C:\\Users\\Tamas\\Documents\\nerokliensapp\\NERO\\HotcakesAdminPro\\HotcakesAdminPro\\HotcakesAdminPro.csproj",
+      "packagesPath": "C:\\Users\\Tamas\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Tamas\\Documents\\nerokliensapp\\NERO\\HotcakesAdminPro\\HotcakesAdminPro\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\kacsa\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\Tamas\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1782,7 +1777,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "10.0.100"
     },
     "frameworks": {
       "net8.0-windows7.0": {
@@ -1816,7 +1811,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
