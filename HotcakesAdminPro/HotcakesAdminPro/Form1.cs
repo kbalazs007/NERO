@@ -233,7 +233,12 @@ namespace HotcakesAdminPro
                                         else
                                         {
                                             string pJson = await GetApiDataAsync($"products/{pid}");
-                                            sku = JObject.Parse(pJson)["Content"]?["Sku"]?.ToString() ?? "";
+                                            // VÉDŐHÁLÓ: Kényszerítjük, hogy objektumként kezelje. Ha sima szöveg/null jön, akkor a 'productContent' null lesz.
+                                            JObject productContent = JObject.Parse(pJson)["Content"] as JObject;
+
+                                            // A '?' operátor miatt ha a productContent null, akkor nem keres benne Sku-t, hanem békén hagyja és megy tovább.
+                                            sku = productContent?["Sku"]?.ToString() ?? "";
+
                                             skuCache[pid] = sku;
                                         }
 
