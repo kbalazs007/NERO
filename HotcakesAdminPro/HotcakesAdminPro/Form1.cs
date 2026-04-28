@@ -564,5 +564,10 @@ namespace HotcakesAdminPro
                 btnLoadVip.Enabled = true;
             }
         }
+
+        private void gridVip_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

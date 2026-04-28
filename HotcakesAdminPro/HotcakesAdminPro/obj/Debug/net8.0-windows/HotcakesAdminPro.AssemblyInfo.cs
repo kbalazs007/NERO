@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HotcakesAdminPro")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7310843dd1aa8e5f987e7373750ed0ca87efd2b1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f3395f2ea7bdc9c658eea8ae2903d2d05205f01a")]
 [assembly: System.Reflection.AssemblyProductAttribute("HotcakesAdminPro")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HotcakesAdminPro")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
