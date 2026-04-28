@@ -62,20 +62,20 @@
             tabControl1.Controls.Add(tabPage1);
             tabControl1.Controls.Add(tabPage2);
             tabControl1.Location = new Point(10, 10);
-            tabControl1.Margin = new Padding(2, 2, 2, 2);
+            tabControl1.Margin = new Padding(2);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(809, 747);
+            tabControl1.Size = new Size(815, 705);
             tabControl1.TabIndex = 0;
             // 
             // tabPageOverview
             // 
             tabPageOverview.Controls.Add(panel3);
             tabPageOverview.Location = new Point(4, 29);
-            tabPageOverview.Margin = new Padding(2, 2, 2, 2);
+            tabPageOverview.Margin = new Padding(2);
             tabPageOverview.Name = "tabPageOverview";
-            tabPageOverview.Padding = new Padding(2, 2, 2, 2);
-            tabPageOverview.Size = new Size(801, 714);
+            tabPageOverview.Padding = new Padding(2);
+            tabPageOverview.Size = new Size(807, 672);
             tabPageOverview.TabIndex = 2;
             tabPageOverview.Text = "Áttekintés";
             tabPageOverview.UseVisualStyleBackColor = true;
@@ -86,9 +86,9 @@
             panel3.Controls.Add(lblWeeklyRevenue);
             panel3.Dock = DockStyle.Top;
             panel3.Location = new Point(2, 2);
-            panel3.Margin = new Padding(2, 2, 2, 2);
+            panel3.Margin = new Padding(2);
             panel3.Name = "panel3";
-            panel3.Size = new Size(797, 40);
+            panel3.Size = new Size(803, 40);
             panel3.TabIndex = 0;
             // 
             // lblWeeklyCustomers
@@ -118,10 +118,10 @@
             tabPage1.Controls.Add(panel2);
             tabPage1.Controls.Add(panel1);
             tabPage1.Location = new Point(4, 29);
-            tabPage1.Margin = new Padding(2, 2, 2, 2);
+            tabPage1.Margin = new Padding(2);
             tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(2, 2, 2, 2);
-            tabPage1.Size = new Size(801, 714);
+            tabPage1.Padding = new Padding(2);
+            tabPage1.Size = new Size(807, 672);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Színeladások";
             tabPage1.UseVisualStyleBackColor = true;
@@ -130,10 +130,10 @@
             // 
             panel2.Controls.Add(gridTopProducts);
             panel2.Dock = DockStyle.Bottom;
-            panel2.Location = new Point(2, 552);
-            panel2.Margin = new Padding(2, 2, 2, 2);
+            panel2.Location = new Point(2, 510);
+            panel2.Margin = new Padding(2);
             panel2.Name = "panel2";
-            panel2.Size = new Size(797, 160);
+            panel2.Size = new Size(803, 160);
             panel2.TabIndex = 2;
             // 
             // gridTopProducts
@@ -143,11 +143,11 @@
             gridTopProducts.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             gridTopProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             gridTopProducts.Location = new Point(0, 0);
-            gridTopProducts.Margin = new Padding(2, 2, 2, 2);
+            gridTopProducts.Margin = new Padding(2);
             gridTopProducts.Name = "gridTopProducts";
             gridTopProducts.ReadOnly = true;
             gridTopProducts.RowHeadersWidth = 62;
-            gridTopProducts.Size = new Size(797, 160);
+            gridTopProducts.Size = new Size(801, 160);
             gridTopProducts.TabIndex = 0;
             // 
             // panel1
@@ -158,9 +158,9 @@
             panel1.Controls.Add(lblTotalSold);
             panel1.Controls.Add(btnLoadColors);
             panel1.Location = new Point(2, 2);
-            panel1.Margin = new Padding(2, 2, 2, 2);
+            panel1.Margin = new Padding(2);
             panel1.Name = "panel1";
-            panel1.Size = new Size(798, 96);
+            panel1.Size = new Size(786, 96);
             panel1.TabIndex = 1;
             // 
             // lblAvgOrder
@@ -199,7 +199,7 @@
             // btnLoadColors
             // 
             btnLoadColors.Location = new Point(2, 2);
-            btnLoadColors.Margin = new Padding(2, 2, 2, 2);
+            btnLoadColors.Margin = new Padding(2);
             btnLoadColors.Name = "btnLoadColors";
             btnLoadColors.Size = new Size(214, 27);
             btnLoadColors.TabIndex = 0;
@@ -212,10 +212,10 @@
             tabPage2.Controls.Add(gridVip);
             tabPage2.Controls.Add(btnLoadVip);
             tabPage2.Location = new Point(4, 29);
-            tabPage2.Margin = new Padding(2, 2, 2, 2);
+            tabPage2.Margin = new Padding(2);
             tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(2, 2, 2, 2);
-            tabPage2.Size = new Size(801, 714);
+            tabPage2.Padding = new Padding(2);
+            tabPage2.Size = new Size(807, 672);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "VIP Kereső";
             tabPage2.UseVisualStyleBackColor = true;
@@ -225,16 +225,17 @@
             gridVip.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             gridVip.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             gridVip.Location = new Point(5, 37);
-            gridVip.Margin = new Padding(2, 2, 2, 2);
+            gridVip.Margin = new Padding(2);
             gridVip.Name = "gridVip";
             gridVip.RowHeadersWidth = 62;
             gridVip.Size = new Size(792, 269);
             gridVip.TabIndex = 1;
+            gridVip.CellContentClick += gridVip_CellContentClick;
             // 
             // btnLoadVip
             // 
             btnLoadVip.Location = new Point(5, 5);
-            btnLoadVip.Margin = new Padding(2, 2, 2, 2);
+            btnLoadVip.Margin = new Padding(2);
             btnLoadVip.Name = "btnLoadVip";
             btnLoadVip.Size = new Size(196, 27);
             btnLoadVip.TabIndex = 0;
@@ -246,9 +247,9 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(823, 766);
+            ClientSize = new Size(836, 724);
             Controls.Add(tabControl1);
-            Margin = new Padding(2, 2, 2, 2);
+            Margin = new Padding(2);
             Name = "Form1";
             Text = "NERO Statisztika";
             Load += Form1_Load;
