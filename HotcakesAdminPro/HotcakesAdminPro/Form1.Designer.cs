@@ -61,19 +61,21 @@
             tabControl1.Controls.Add(tabPageOverview);
             tabControl1.Controls.Add(tabPage1);
             tabControl1.Controls.Add(tabPage2);
-            tabControl1.Location = new Point(12, 12);
+            tabControl1.Location = new Point(10, 10);
+            tabControl1.Margin = new Padding(2, 2, 2, 2);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(950, 821);
+            tabControl1.Size = new Size(809, 747);
             tabControl1.TabIndex = 0;
             // 
             // tabPageOverview
             // 
             tabPageOverview.Controls.Add(panel3);
-            tabPageOverview.Location = new Point(4, 34);
+            tabPageOverview.Location = new Point(4, 29);
+            tabPageOverview.Margin = new Padding(2, 2, 2, 2);
             tabPageOverview.Name = "tabPageOverview";
-            tabPageOverview.Padding = new Padding(3);
-            tabPageOverview.Size = new Size(942, 783);
+            tabPageOverview.Padding = new Padding(2, 2, 2, 2);
+            tabPageOverview.Size = new Size(801, 714);
             tabPageOverview.TabIndex = 2;
             tabPageOverview.Text = "Áttekintés";
             tabPageOverview.UseVisualStyleBackColor = true;
@@ -83,18 +85,20 @@
             panel3.Controls.Add(lblWeeklyCustomers);
             panel3.Controls.Add(lblWeeklyRevenue);
             panel3.Dock = DockStyle.Top;
-            panel3.Location = new Point(3, 3);
+            panel3.Location = new Point(2, 2);
+            panel3.Margin = new Padding(2, 2, 2, 2);
             panel3.Name = "panel3";
-            panel3.Size = new Size(936, 50);
+            panel3.Size = new Size(797, 40);
             panel3.TabIndex = 0;
             // 
             // lblWeeklyCustomers
             // 
             lblWeeklyCustomers.AutoSize = true;
             lblWeeklyCustomers.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblWeeklyCustomers.Location = new Point(422, 15);
+            lblWeeklyCustomers.Location = new Point(338, 12);
+            lblWeeklyCustomers.Margin = new Padding(2, 0, 2, 0);
             lblWeeklyCustomers.Name = "lblWeeklyCustomers";
-            lblWeeklyCustomers.Size = new Size(222, 25);
+            lblWeeklyCustomers.Size = new Size(181, 20);
             lblWeeklyCustomers.TabIndex = 1;
             lblWeeklyCustomers.Text = "Heti vásárlók száma: - fő";
             // 
@@ -102,9 +106,10 @@
             // 
             lblWeeklyRevenue.AutoSize = true;
             lblWeeklyRevenue.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblWeeklyRevenue.Location = new Point(3, 15);
+            lblWeeklyRevenue.Location = new Point(2, 12);
+            lblWeeklyRevenue.Margin = new Padding(2, 0, 2, 0);
             lblWeeklyRevenue.Name = "lblWeeklyRevenue";
-            lblWeeklyRevenue.Size = new Size(169, 25);
+            lblWeeklyRevenue.Size = new Size(139, 20);
             lblWeeklyRevenue.TabIndex = 0;
             lblWeeklyRevenue.Text = "Heti forgalom: - Ft";
             // 
@@ -112,10 +117,11 @@
             // 
             tabPage1.Controls.Add(panel2);
             tabPage1.Controls.Add(panel1);
-            tabPage1.Location = new Point(4, 34);
+            tabPage1.Location = new Point(4, 29);
+            tabPage1.Margin = new Padding(2, 2, 2, 2);
             tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(942, 783);
+            tabPage1.Padding = new Padding(2, 2, 2, 2);
+            tabPage1.Size = new Size(801, 714);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Színeladások";
             tabPage1.UseVisualStyleBackColor = true;
@@ -124,9 +130,10 @@
             // 
             panel2.Controls.Add(gridTopProducts);
             panel2.Dock = DockStyle.Bottom;
-            panel2.Location = new Point(3, 580);
+            panel2.Location = new Point(2, 552);
+            panel2.Margin = new Padding(2, 2, 2, 2);
             panel2.Name = "panel2";
-            panel2.Size = new Size(936, 200);
+            panel2.Size = new Size(797, 160);
             panel2.TabIndex = 2;
             // 
             // gridTopProducts
@@ -136,10 +143,11 @@
             gridTopProducts.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             gridTopProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             gridTopProducts.Location = new Point(0, 0);
+            gridTopProducts.Margin = new Padding(2, 2, 2, 2);
             gridTopProducts.Name = "gridTopProducts";
             gridTopProducts.ReadOnly = true;
             gridTopProducts.RowHeadersWidth = 62;
-            gridTopProducts.Size = new Size(936, 200);
+            gridTopProducts.Size = new Size(797, 160);
             gridTopProducts.TabIndex = 0;
             // 
             // panel1
@@ -149,18 +157,20 @@
             panel1.Controls.Add(lblTotalRevenue);
             panel1.Controls.Add(lblTotalSold);
             panel1.Controls.Add(btnLoadColors);
-            panel1.Location = new Point(3, 3);
+            panel1.Location = new Point(2, 2);
+            panel1.Margin = new Padding(2, 2, 2, 2);
             panel1.Name = "panel1";
-            panel1.Size = new Size(936, 120);
+            panel1.Size = new Size(798, 96);
             panel1.TabIndex = 1;
             // 
             // lblAvgOrder
             // 
             lblAvgOrder.AutoSize = true;
             lblAvgOrder.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblAvgOrder.Location = new Point(3, 40);
+            lblAvgOrder.Location = new Point(2, 32);
+            lblAvgOrder.Margin = new Padding(2, 0, 2, 0);
             lblAvgOrder.Name = "lblAvgOrder";
-            lblAvgOrder.Size = new Size(212, 25);
+            lblAvgOrder.Size = new Size(174, 20);
             lblAvgOrder.TabIndex = 3;
             lblAvgOrder.Text = "Átlagos kosárérték: - Ft";
             // 
@@ -168,9 +178,10 @@
             // 
             lblTotalRevenue.AutoSize = true;
             lblTotalRevenue.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblTotalRevenue.Location = new Point(566, 8);
+            lblTotalRevenue.Location = new Point(453, 6);
+            lblTotalRevenue.Margin = new Padding(2, 0, 2, 0);
             lblTotalRevenue.Name = "lblTotalRevenue";
-            lblTotalRevenue.Size = new Size(114, 25);
+            lblTotalRevenue.Size = new Size(93, 20);
             lblTotalRevenue.TabIndex = 2;
             lblTotalRevenue.Text = "Bevétel: - Ft";
             // 
@@ -178,17 +189,19 @@
             // 
             lblTotalSold.AutoSize = true;
             lblTotalSold.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblTotalSold.Location = new Point(277, 8);
+            lblTotalSold.Location = new Point(222, 6);
+            lblTotalSold.Margin = new Padding(2, 0, 2, 0);
             lblTotalSold.Name = "lblTotalSold";
-            lblTotalSold.Size = new Size(144, 25);
+            lblTotalSold.Size = new Size(117, 20);
             lblTotalSold.TabIndex = 1;
             lblTotalSold.Text = "Eladott darab: -";
             // 
             // btnLoadColors
             // 
-            btnLoadColors.Location = new Point(3, 3);
+            btnLoadColors.Location = new Point(2, 2);
+            btnLoadColors.Margin = new Padding(2, 2, 2, 2);
             btnLoadColors.Name = "btnLoadColors";
-            btnLoadColors.Size = new Size(268, 34);
+            btnLoadColors.Size = new Size(214, 27);
             btnLoadColors.TabIndex = 0;
             btnLoadColors.Text = "Szín Statisztika Betöltése";
             btnLoadColors.UseVisualStyleBackColor = true;
@@ -198,28 +211,32 @@
             // 
             tabPage2.Controls.Add(gridVip);
             tabPage2.Controls.Add(btnLoadVip);
-            tabPage2.Location = new Point(4, 34);
+            tabPage2.Location = new Point(4, 29);
+            tabPage2.Margin = new Padding(2, 2, 2, 2);
             tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(942, 783);
+            tabPage2.Padding = new Padding(2, 2, 2, 2);
+            tabPage2.Size = new Size(801, 714);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "VIP Kereső";
             tabPage2.UseVisualStyleBackColor = true;
             // 
             // gridVip
             // 
+            gridVip.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             gridVip.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            gridVip.Location = new Point(6, 46);
+            gridVip.Location = new Point(5, 37);
+            gridVip.Margin = new Padding(2, 2, 2, 2);
             gridVip.Name = "gridVip";
             gridVip.RowHeadersWidth = 62;
-            gridVip.Size = new Size(756, 336);
+            gridVip.Size = new Size(792, 269);
             gridVip.TabIndex = 1;
             // 
             // btnLoadVip
             // 
-            btnLoadVip.Location = new Point(6, 6);
+            btnLoadVip.Location = new Point(5, 5);
+            btnLoadVip.Margin = new Padding(2, 2, 2, 2);
             btnLoadVip.Name = "btnLoadVip";
-            btnLoadVip.Size = new Size(245, 34);
+            btnLoadVip.Size = new Size(196, 27);
             btnLoadVip.TabIndex = 0;
             btnLoadVip.Text = "VIP Vásárlók Keresése";
             btnLoadVip.UseVisualStyleBackColor = true;
@@ -227,12 +244,13 @@
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(967, 845);
+            ClientSize = new Size(823, 766);
             Controls.Add(tabControl1);
+            Margin = new Padding(2, 2, 2, 2);
             Name = "Form1";
-            Text = "Form1";
+            Text = "NERO Statisztika";
             Load += Form1_Load;
             tabControl1.ResumeLayout(false);
             tabPageOverview.ResumeLayout(false);

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Tamas\\Documents\\nerokliensapp\\NERO\\HotcakesAdminPro\\HotcakesAdminPro\\HotcakesAdminPro.csproj": {}
+    "C:\\Users\\Tamas\\Documents\\letoltesteszt\\NERO\\HotcakesAdminPro\\HotcakesAdminPro\\HotcakesAdminPro.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Tamas\\Documents\\nerokliensapp\\NERO\\HotcakesAdminPro\\HotcakesAdminPro\\HotcakesAdminPro.csproj": {
+    "C:\\Users\\Tamas\\Documents\\letoltesteszt\\NERO\\HotcakesAdminPro\\HotcakesAdminPro\\HotcakesAdminPro.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Tamas\\Documents\\nerokliensapp\\NERO\\HotcakesAdminPro\\HotcakesAdminPro\\HotcakesAdminPro.csproj",
+        "projectUniqueName": "C:\\Users\\Tamas\\Documents\\letoltesteszt\\NERO\\HotcakesAdminPro\\HotcakesAdminPro\\HotcakesAdminPro.csproj",
         "projectName": "HotcakesAdminPro",
-        "projectPath": "C:\\Users\\Tamas\\Documents\\nerokliensapp\\NERO\\HotcakesAdminPro\\HotcakesAdminPro\\HotcakesAdminPro.csproj",
+        "projectPath": "C:\\Users\\Tamas\\Documents\\letoltesteszt\\NERO\\HotcakesAdminPro\\HotcakesAdminPro\\HotcakesAdminPro.csproj",
         "packagesPath": "C:\\Users\\Tamas\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Tamas\\Documents\\nerokliensapp\\NERO\\HotcakesAdminPro\\HotcakesAdminPro\\obj\\",
+        "outputPath": "C:\\Users\\Tamas\\Documents\\letoltesteszt\\NERO\\HotcakesAdminPro\\HotcakesAdminPro\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Tamas\\AppData\\Roaming\\NuGet\\NuGet.Config",
